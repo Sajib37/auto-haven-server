@@ -46,6 +46,28 @@ async function run() {
           const result = await cursor.toArray();
           res.send(result);
       })
+    app.get('/details/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await productCollection.find(query).toArray()
+
+      console.log(result)
+      res.send(result)
+    })
+
+    // Cart collection
+    const cartCollection = client.db("productsDB").collection("carts");
+    // cart post by clicking cart button
+    app.post('/carts', async (req, res) => {
+      const newCart = req.body;
+      const result = await cartCollection.insertOne(newCart)
+      res.send(result)
+      
+    })
+
+    
+
+
     await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
       
